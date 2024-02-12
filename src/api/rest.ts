@@ -35,7 +35,7 @@ export class REST {
       headers: {
         ...options.headers || {},
         ...options.body ? { 'Content-Type': 'application/json' } : {},
-        ...this.token ? { 'Authorization': this.token } : {},
+        ...this.token ? { 'Authorization': `Bearer ${this.token}` } : {},
       },
     });
   }

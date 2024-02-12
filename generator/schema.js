@@ -68,7 +68,7 @@ const Schema = {
     return stripIndent(codeBlock)`
       ${schema.description ? `/** ${schema.description} */` : ''}
       ${`export type ${schema.name} = ${content};`}
-    `
+    `;
   },
 }
 

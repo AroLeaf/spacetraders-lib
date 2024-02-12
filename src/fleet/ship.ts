@@ -1,12 +1,42 @@
-import { ApiTypes, Client } from '..';
+import { ApiTypes, Client, Crew, Engine, Frame, Module, Mount, Reactor } from '..';
 
+// TODO: Nav
 export class Ship {
-  client: Client;
-  symbol: string;
+  client            : Client;
+  symbol            : string;
+  role              : ApiTypes.ShipRole;
+  factionSymbol     : ApiTypes.FactionSymbol;
+  crew              : Crew;
+  frame             : Frame;
+  reactor           : Reactor;
+  engine            : Engine;
+  modules           : Map<string, Module>;
+  mounts            : Map<string, Mount>;
+  cargoCapacity     : number;
+  inventory         : Map<string, ApiTypes.ShipCargoItem>;
+  fuel              : ApiTypes.ShipFuel;
+  cooldownTimestamp?: number;
+
 
   constructor(client: Client, data: ApiTypes.Ship) {
-    this.client = client;
-    this.symbol = data.symbol;
+    this.client            = client;
+    this.symbol            = data.symbol;
+    this.role              = data.registration.role;
+    this.factionSymbol     = data.registration.factionSymbol as ApiTypes.FactionSymbol;
+    this.crew              = new Crew(this, data.crew);
+    this.frame             = new Frame(this, data.frame);
+    this.reactor           = new Reactor(this, data.reactor);
+    this.engine            = new Engine(this, data.engine);
+    this.modules           = new Map(data.modules.map(module => [module.symbol, new Module(this, module)]));
+    this.mounts            = new Map(data.mounts.map(mount => [mount.symbol, new Mount(this, mount)]));
+    this.cargoCapacity     = data.cargo.capacity;
+    this.inventory         = new Map(data.cargo.inventory.map(item => [item.symbol, item]));
+    this.fuel              = data.fuel;
+    this.cooldownTimestamp = data.cooldown.expiration ? new Date(data.cooldown.expiration).getTime() : undefined;
+  }
+
+  get cooldown() {
+    return this.cooldownTimestamp ? new Date(this.cooldownTimestamp) : undefined;
   }
 }
 
