@@ -1,6 +1,6 @@
-import { ApiTypes, Client, Crew, Engine, Frame, Module, Mount, Reactor } from '..';
+import { ApiTypes, Cargo, Client, Crew, Engine, Frame, Module, Mount, Reactor } from '..';
 
-// TODO: Nav
+// TODO: Nav (needs universe)
 export class Ship {
   client            : Client;
   symbol            : string;
@@ -12,11 +12,9 @@ export class Ship {
   engine            : Engine;
   modules           : Map<string, Module>;
   mounts            : Map<string, Mount>;
-  cargoCapacity     : number;
-  inventory         : Map<string, ApiTypes.ShipCargoItem>;
+  cargo             : Cargo;
   fuel              : ApiTypes.ShipFuel;
   cooldownTimestamp?: number;
-
 
   constructor(client: Client, data: ApiTypes.Ship) {
     this.client            = client;
@@ -29,8 +27,7 @@ export class Ship {
     this.engine            = new Engine(this, data.engine);
     this.modules           = new Map(data.modules.map(module => [module.symbol, new Module(this, module)]));
     this.mounts            = new Map(data.mounts.map(mount => [mount.symbol, new Mount(this, mount)]));
-    this.cargoCapacity     = data.cargo.capacity;
-    this.inventory         = new Map(data.cargo.inventory.map(item => [item.symbol, item]));
+    this.cargo             = new Cargo(this, data.cargo);
     this.fuel              = data.fuel;
     this.cooldownTimestamp = data.cooldown.expiration ? new Date(data.cooldown.expiration).getTime() : undefined;
   }
