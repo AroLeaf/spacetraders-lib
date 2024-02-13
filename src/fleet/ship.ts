@@ -36,8 +36,16 @@ export class Ship {
     return this.cooldownTimestamp ? new Date(this.cooldownTimestamp) : undefined;
   }
 
-  patch(data: ApiTypes.Ship) {
-    //
+  patch(data: Partial<ApiTypes.Ship>) {
+    if (data.frame)                 this.frame              = new Frame(this, data.frame);
+    if (data.reactor)               this.reactor            = new Reactor(this, data.reactor);
+    if (data.engine)                this.engine             = new Engine(this, data.engine);
+    if (data.modules)               this.modules            = new Map(data.modules.map(module => [module.symbol, new Module(this, module)]));
+    if (data.mounts)                this.mounts             = new Map(data.mounts.map(mount => [mount.symbol, new Mount(this, mount)]));
+    if (data.fuel)                  this.fuel               = data.fuel;
+    if (data.cooldown?.expiration)  this.cooldownTimestamp  = new Date(data.cooldown.expiration).getTime();
+    if (data.cargo)                 this.cargo.patch(data.cargo);
+    if (data.crew)                  this.crew.patch(data.crew);
   }
 }
 

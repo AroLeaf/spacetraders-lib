@@ -18,7 +18,7 @@ export class System {
     this.x = data.x;
     this.y = data.y;
     this.waypointSymbols = data.waypoints.map(waypointData => this.universe.addWaypoint(waypointData).symbol);
-    this.factionSymbols = data.factions.map(factionData => factionData.symbol);
+    this.factionSymbols = data.factions.map(factionData => this.universe.addFaction(factionData).symbol);
   }
 
   get client() {
