@@ -35,6 +35,10 @@ export class Ship {
   get cooldown() {
     return this.cooldownTimestamp ? new Date(this.cooldownTimestamp) : undefined;
   }
+
+  patch(data: ApiTypes.Ship) {
+    //
+  }
 }
 
 export default Ship;
