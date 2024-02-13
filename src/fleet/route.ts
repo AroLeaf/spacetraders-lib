@@ -19,6 +19,14 @@ export class Route {
     return this.ship.client;
   }
 
+  get destination() {
+    return this.client.universe.waypoints.get(this.destinationSymbol);
+  }
+
+  get origin() {
+    return this.client.universe.waypoints.get(this.originSymbol);
+  }
+
   get departure() {
     return new Date(this.departureTimestamp);
   }

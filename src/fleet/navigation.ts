@@ -21,6 +21,14 @@ export class Navigation {
     return this.ship.client;
   }
 
+  get system() {
+    return this.client.universe.systems.get(this.systemSymbol);
+  }
+  
+  get waypoint() {
+    return this.client.universe.waypoints.get(this.waypointSymbol);
+  }
+
   patch(data: Partial<ApiTypes.ShipNav>) {
     if (data.systemSymbol) this.systemSymbol = data.systemSymbol;
     if (data.waypointSymbol) this.waypointSymbol = data.waypointSymbol;

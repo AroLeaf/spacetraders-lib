@@ -2,7 +2,7 @@ import { ApiTypes, Universe } from '..';
 
 export type WaypointData =
   & Partial<ApiTypes.Waypoint> 
-  & Partial<ApiTypes.ScannedWaypoint> 
+  & Partial<ApiTypes.SystemWaypoint> 
   & ApiTypes.ShipNavRouteWaypoint;
 
 export class Waypoint {
@@ -11,6 +11,7 @@ export class Waypoint {
   type                : ApiTypes.WaypointType;
   x                   : number;
   y                   : number;
+  systemSymbol?       : string;
   orbitals?           : string[];
   orbits?             : string;
   factionSymbol?      : string;
@@ -25,6 +26,7 @@ export class Waypoint {
     this.type                = data.type;
     this.x                   = data.x;
     this.y                   = data.y;
+    this.systemSymbol        = data.systemSymbol;
     this.orbitals            = data.orbitals?.map(orbital => orbital.symbol);
     this.orbits              = data.orbits;
     this.factionSymbol       = data.faction?.symbol;
@@ -36,6 +38,14 @@ export class Waypoint {
 
   get client() {
     return this.universe.client;
+  }
+
+  get system() {
+    return this.systemSymbol ? this.universe.systems.get(this.systemSymbol) : undefined;
+  }
+
+  get faction() {
+    return this.factionSymbol ? this.universe.factions.get(this.factionSymbol) : undefined;
   }
 
   patch(data: Partial<WaypointData>) {

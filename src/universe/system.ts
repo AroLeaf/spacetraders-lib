@@ -17,12 +17,20 @@ export class System {
     this.type = data.type;
     this.x = data.x;
     this.y = data.y;
-    this.waypointSymbols = data.waypoints.map(waypointData => this.universe.addWaypoint(waypointData).symbol);
+    this.waypointSymbols = data.waypoints.map(waypointData => this.universe.addWaypoint(Object.assign(waypointData, { systemSymbol: this.symbol })).symbol);
     this.factionSymbols = data.factions.map(factionData => this.universe.addFaction(factionData).symbol);
   }
 
   get client() {
     return this.universe.client;
+  }
+
+  get waypoints() {
+    return this.waypointSymbols.map(symbol => this.client.universe.waypoints.get(symbol));
+  }
+
+  get factions() {
+    return this.factionSymbols.map(symbol => this.client.universe.factions.get(symbol));
   }
 }
 
