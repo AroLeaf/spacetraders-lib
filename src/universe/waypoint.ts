@@ -11,7 +11,7 @@ export class Waypoint {
   type                : ApiTypes.WaypointType;
   x                   : number;
   y                   : number;
-  orbitals?           : ApiTypes.WaypointOrbital[];   // TODO: change to better thing
+  orbitals?           : string[];
   orbits?             : string;
   factionSymbol?      : string;
   traits?             : ApiTypes.WaypointTrait[];
@@ -25,7 +25,7 @@ export class Waypoint {
     this.type                = data.type;
     this.x                   = data.x;
     this.y                   = data.y;
-    this.orbitals            = data.orbitals;
+    this.orbitals            = data.orbitals?.map(orbital => orbital.symbol);
     this.orbits              = data.orbits;
     this.factionSymbol       = data.faction?.symbol;
     this.traits              = data.traits;
@@ -39,7 +39,7 @@ export class Waypoint {
   }
 
   patch(data: Partial<WaypointData>) {
-    if (data.orbitals) this.orbitals = data.orbitals;
+    if (data.orbitals) this.orbitals = data.orbitals?.map(orbital => orbital.symbol);
     if (data.orbits) this.orbits = data.orbits;
     if (data.faction) this.factionSymbol = data.faction.symbol;
     if (data.traits) this.traits = data.traits;

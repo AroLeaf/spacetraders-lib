@@ -1,6 +1,5 @@
 import { ApiTypes, Cargo, Client, Crew, Engine, Frame, Module, Mount, Reactor } from '..';
 
-// TODO: Nav (needs universe)
 export class Ship {
   client            : Client;
   symbol            : string;
