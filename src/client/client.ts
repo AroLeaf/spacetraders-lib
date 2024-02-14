@@ -24,7 +24,7 @@ export class Client {
     if (this.rest.token) throw new Error('Client already has an agent!');
     const { token } = await this.rest.register({ symbol, faction, email });
     this.logger.info(`Token: ${token}`);
-    // process `res`
+    // TODO: process `res`
     return this;
   }
 }
