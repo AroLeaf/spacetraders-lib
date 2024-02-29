@@ -1,4 +1,8 @@
-import { ApiTypes, Cargo, Client, Crew, Engine, Frame, Module, Mount, Reactor } from '..';
+import { Client } from '../client';
+import { ApiTypes } from '../api';
+import { Engine, Frame, Module, Mount, Reactor } from './components';
+import { Crew } from './crew';
+import { Cargo } from './cargo';
 
 export class Ship {
   client            : Client;

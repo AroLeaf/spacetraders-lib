@@ -1,4 +1,6 @@
-import { ApiTypes, Ratelimiter } from '..';
+import * as ApiTypes from './types';
+import { Ratelimiter } from '../lib';
+import { APIError, APIErrorData } from './apiError';
 
 export interface RequestOptions {
   method?: string,
@@ -29,7 +31,7 @@ export class REST {
         .map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&')
       : '';
 
-    return fetch(this.baseUrl + path + queryString, {
+    const res = await fetch(this.baseUrl + path + queryString, {
       method: options.method || (options.body ? 'POST' : 'GET'),
       ...options.body ? { body: JSON.stringify(options.body) } : {},
       headers: {
@@ -38,6 +40,18 @@ export class REST {
         ...this.token ? { 'Authorization': `Bearer ${this.token}` } : {},
       },
     });
+
+    if (res.status >= 400) {
+      const data = await res.json().catch(() => ({
+        error: {
+          code: res.status,
+          message: res.statusText,
+        },
+      }));
+      throw new APIError(path, data.error as APIErrorData);
+    }
+
+    return res;
   }
 
 
@@ -88,7 +102,7 @@ export class REST {
   }> {
     const res = await this.request('/register', { body });
     const { data } = await res.json();
-    ({ token: this.token } = data);
+    this.token = data.token;
     return data;
   }
 

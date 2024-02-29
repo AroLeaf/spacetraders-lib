@@ -1,4 +1,6 @@
-import { ApiTypes, Component, Ship } from '../..';
+import { ApiTypes } from '../../api';
+import { Component } from './component';
+import { Ship } from '..';
 
 export class Engine extends Component implements ApiTypes.ShipEngine {
   symbol     : 'ENGINE_IMPULSE_DRIVE_I' | 'ENGINE_ION_DRIVE_I' | 'ENGINE_ION_DRIVE_II' | 'ENGINE_HYPER_DRIVE_I';

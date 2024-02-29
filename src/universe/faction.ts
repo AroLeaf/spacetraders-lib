@@ -1,4 +1,6 @@
-import { ApiTypes, Universe, Waypoint } from '..';
+import { ApiTypes } from '../api';
+import { Universe } from './universe';
+import { Waypoint } from './waypoint';
 
 export type FactionData = Partial<ApiTypes.Faction> & ApiTypes.SystemFaction;
 

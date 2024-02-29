@@ -1,4 +1,6 @@
-import { ApiTypes, Client, Ship } from '..';
+import { Client } from '../client';
+import { ApiTypes } from '../api';
+import { Ship } from './ship';
 
 export class Fleet {
   client: Client;

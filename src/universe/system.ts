@@ -1,4 +1,5 @@
-import { ApiTypes, Universe } from '..';
+import { ApiTypes } from '../api';
+import { Universe } from './universe';
 
 export class System {
   universe: Universe;

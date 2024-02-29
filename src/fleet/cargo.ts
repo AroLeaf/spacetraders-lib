@@ -1,4 +1,5 @@
-import { ApiTypes, Ship } from '..';
+import { ApiTypes } from '../api';
+import { Ship } from './ship';
 
 export class Cargo {
   ship    : Ship;

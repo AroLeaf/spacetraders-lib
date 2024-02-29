@@ -1,4 +1,8 @@
-import { ApiTypes, Client, Faction, FactionData, System, Waypoint, WaypointData } from '..';
+import { Client  } from '../client';
+import { ApiTypes } from '../api';
+import { Faction, FactionData } from './faction';
+import { Waypoint, WaypointData } from './waypoint';
+import { System } from './system';
 
 export class Universe {
   client: Client;

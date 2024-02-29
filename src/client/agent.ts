@@ -1,4 +1,5 @@
-import { ApiTypes, Client } from '..';
+import { ApiTypes } from '../api';
+import { Client } from './client';
 
 export class Agent {
   client               : Client;

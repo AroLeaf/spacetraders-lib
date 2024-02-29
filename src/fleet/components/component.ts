@@ -1,4 +1,5 @@
-import { ApiTypes, Ship } from '../..';
+import { ApiTypes } from '../../api';
+import { Ship } from '..';
 
 export interface ComponentData {
   symbol      : string;

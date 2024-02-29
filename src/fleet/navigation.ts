@@ -1,4 +1,6 @@
-import { ApiTypes, Route, Ship } from '..';
+import { Route } from './route';
+import { ApiTypes } from '../api';
+import { Ship } from './ship';
 
 export class Navigation {
   ship          : Ship;
