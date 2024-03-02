@@ -1,5 +1,5 @@
 import * as ApiTypes from './types';
-import { Ratelimiter } from '../lib';
+import { Ratelimiter, FilteredKeys, RemoveLast } from '../lib';
 import { APIError, APIErrorData } from './apiError';
 
 export interface RequestOptions {
@@ -22,7 +22,7 @@ export class REST {
     ]);
   }
 
-  async request(path: string, options: RequestOptions = {}) {
+  async request(path: string, options: RequestOptions = {}): Promise<Response> {
     await this.#ratelimiter.queue();
 
     const queryString: string = options.query
@@ -42,13 +42,14 @@ export class REST {
     });
 
     if (res.status >= 400) {
-      const data = await res.json().catch(() => ({
+      const data: { error: APIErrorData } = await res.json().catch(() => ({
         error: {
           code: res.status,
           message: res.statusText,
         },
       }));
-      throw new APIError(path, data.error as APIErrorData);
+      if (res.status === 429 && data.error.data) return this.request(path, options);
+      throw new APIError(path, data.error);
     }
 
     return res;
@@ -412,6 +413,27 @@ export class REST {
     const res = await this.request(`/systems/${systemSymbol}/waypoints/${waypointSymbol}/construction/supply`, { body });
     const { data } = await res.json();
     return data;
+  }
+
+
+  get paginated() {
+    return new Proxy({} as { readonly [K in FilteredKeys<Omit<this, 'paginated'>, (...args: any[]) => Promise<{ data: any[], meta: ApiTypes.Meta }>>]: (...args: RemoveLast<Parameters<this[K] extends (...args: any) => any ? this[K] : never>>) => Promise<Awaited<ReturnType<this[K] extends (...args: any) => any ? this[K] : never>>['data']> }, {
+      get: (_, p) => {
+        return async (...args: any[]) => {
+          const collected = [];
+          const limit = 20;
+          let page = 1;
+          while (true) {
+            const { data, meta } = await (this[p as keyof this] as (...args: any[]) => Promise<{ data: any[], meta: ApiTypes.Meta }>)(...args, { limit, page });
+            collected.push(...data);
+            console.log(`${collected.length} / ${meta.total}`);
+            if (collected.length >= meta.total) break;
+            page++;
+          }
+          return collected;
+        }
+      },
+    });
   }
 }
 
