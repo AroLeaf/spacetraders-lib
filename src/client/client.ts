@@ -41,6 +41,35 @@ export class Client {
    
     return this;
   }
+
+  setAgent(data: ApiTypes.Agent): Agent {
+    return this.agent = this.agent?.patch(data) || new Agent(this, data);
+  }
+
+  async getAgent(): Promise<Agent> {
+    const agent = new Agent(this, await this.rest.getMyAgent());
+    this.agent = agent;
+    return agent;
+  }
+
+  addContract(data: ApiTypes.Contract): Contract {
+    const existing = this.contracts.get(data.id);
+    const contract = existing || new Contract(this, data);
+    if (existing) contract.patch(data);
+    else this.contracts.set(contract.id, contract);
+    return contract;
+  }
+
+  async getContracts(): Promise<Contract[]> {
+    const contracts = await this.rest.paginated.getContracts();
+    return contracts.map(contract => this.addContract(contract));
+  }
+
+  async getContract(id: string, force = false): Promise<Contract> {
+    const existing = this.contracts.get(id);
+    if (existing && !force) return existing;
+    return this.addContract(await this.rest.getContract(id));
+  }
 }
 
 export default Client;

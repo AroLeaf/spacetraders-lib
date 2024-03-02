@@ -35,6 +35,28 @@ export class Contract {
   get deadlineToAccept() {
     return this.deadlineToAcceptTimestamp ? new Date(this.deadlineToAcceptTimestamp) : undefined;
   }
+
+  patch(data: Partial<ApiTypes.Contract>) {
+    if (data.accepted) this.accepted = data.accepted;
+    if (data.fulfilled) this.fulfilled = data.fulfilled;
+    if (data.terms) {
+      this.paymentOnAccepted = data.terms.payment.onAccepted;
+      this.paymentOnFulfilled = data.terms.payment.onFulfilled;
+      this.deliver = data.terms.deliver;
+    }
+  }
+
+  async accept() {
+    const { agent, contract } = await this.client.rest.acceptContract(this.id);
+    this.client.setAgent(agent);
+    this.patch(contract);
+  }
+
+  async fulfill() {
+    const { agent, contract } = await this.client.rest.fulfillContract(this.id);
+    this.client.setAgent(agent);
+    this.patch(contract);
+  }
 }
 
 export default Contract;

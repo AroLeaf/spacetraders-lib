@@ -31,12 +31,13 @@ export class Faction {
     return this.headquarterSymbol ? this.universe.waypoints.get(this.headquarterSymbol) : undefined;
   }
 
-  patch(data: Partial<FactionData>) {
+  patch(data: Partial<FactionData>): this {
     if (data.name) this.name = data.name;
     if (data.description) this.description = data.description;
     if (data.headquarters) this.headquarterSymbol = data.headquarters;
     if (data.traits) this.traits = data.traits;
     if (data.isRecruiting) this.isRecruiting = data.isRecruiting;
+    return this;
   }
 }
 

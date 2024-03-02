@@ -27,9 +27,10 @@ export class Agent {
     return this.startingFactionSymbol ? this.client.universe.factions.get(this.startingFactionSymbol) : undefined;
   }
 
-  patch(data: Partial<ApiTypes.Agent>) {
+  patch(data: Partial<ApiTypes.Agent>): this {
     if (data.credits) this.credits = data.credits;
     if (data.shipCount) this.shipCount = data.shipCount;
+    return this;
   }
 }
 

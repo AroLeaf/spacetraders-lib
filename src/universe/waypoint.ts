@@ -49,7 +49,7 @@ export class Waypoint {
     return this.factionSymbol ? this.universe.factions.get(this.factionSymbol) : undefined;
   }
 
-  patch(data: Partial<WaypointData>) {
+  patch(data: Partial<WaypointData>): this {
     if (data.orbitals) this.orbitals = data.orbitals?.map(orbital => orbital.symbol);
     if (data.orbits) this.orbits = data.orbits;
     if (data.faction) this.factionSymbol = data.faction.symbol;
@@ -57,6 +57,7 @@ export class Waypoint {
     if (data.modifiers) this.modifiers = data.modifiers;
     if (data.chart) this.chart = data.chart;
     if (data.isUnderConstruction) this.isUnderConstruction = data.isUnderConstruction;
+    return this;
   }
 }
 

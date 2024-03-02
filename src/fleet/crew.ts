@@ -24,13 +24,14 @@ export class Crew implements ApiTypes.ShipCrew {
     return this.ship.client;
   }
 
-  patch(data: Partial<ApiTypes.ShipCrew>) {
+  patch(data: Partial<ApiTypes.ShipCrew>): this {
     if (data.current) this.current = data.current;
     if (data.required) this.required = data.required;
     if (data.capacity) this.capacity = data.capacity;
     if (data.rotation) this.rotation = data.rotation;
     if (data.morale) this.morale = data.morale;
     if (data.wages) this.wages = data.wages;
+    return this;
   }
 }
 

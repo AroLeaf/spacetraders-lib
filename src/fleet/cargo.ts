@@ -16,8 +16,9 @@ export class Cargo {
     return this.ship.client;
   }
 
-  patch(data: Partial<ApiTypes.ShipCargo>) {
+  patch(data: Partial<ApiTypes.ShipCargo>): this {
     if (data.capacity) this.capacity = data.capacity;
-    if (data.inventory) this.items = new Map(data.inventory.map(item => [item.symbol, item])); // TODO: map patch
+    if (data.inventory) this.items = new Map(data.inventory.map(item => [item.symbol, item])); // TODO: map patch, item class, item endpoints
+    return this;
   }
 }

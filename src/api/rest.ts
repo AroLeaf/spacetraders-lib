@@ -306,13 +306,13 @@ export class REST {
     return data;
   }
 
-  async createShipWaypointScan(shipSymbol: string): Promise<{ cooldown: ApiTypes.Cooldown, systems: ApiTypes.ScannedWaypoint[] }> {
+  async createShipWaypointScan(shipSymbol: string): Promise<{ cooldown: ApiTypes.Cooldown, waypoints: ApiTypes.ScannedWaypoint[] }> {
     const res = await this.request(`/my/ships/${shipSymbol}/scan/waypoints`, { method: 'POST' });
     const { data } = await res.json();
     return data;
   }
 
-  async createShipShipScan(shipSymbol: string): Promise<{ cooldown: ApiTypes.Cooldown, systems: ApiTypes.ScannedShip[] }> {
+  async createShipShipScan(shipSymbol: string): Promise<{ cooldown: ApiTypes.Cooldown, ships: ApiTypes.ScannedShip[] }> {
     const res = await this.request(`/my/ships/${shipSymbol}/scan/ships`, { method: 'POST' });
     const { data } = await res.json();
     return data;

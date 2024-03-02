@@ -12,11 +12,19 @@ export class Fleet {
   }
 
   addShip(data: ApiTypes.Ship) {
-    const exists = this.ships.get(data.symbol);
-    const ship = exists || new Ship(this.client, data);
-    if (exists) ship.patch(data);
-    else this.ships.set(ship.symbol, ship);
+    const existing = this.ships.get(data.symbol)?.patch(data);
+    const ship = existing || new Ship(this.client, data);
+    if (!existing) this.ships.set(ship.symbol, ship);
     return ship;
+  }
+
+  async getShips(): Promise<Ship[]> {
+    const ships = await this.client.rest.paginated.getMyShips();
+    return ships.map(ship => this.addShip(ship));
+  }
+
+  async getShip(symbol: string): Promise<Ship> {
+    return this.addShip(await this.client.rest.getMyShip(symbol));
   }
 }
 
